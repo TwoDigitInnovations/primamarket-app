@@ -23,7 +23,7 @@ import { useNavigationContainerRef } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
 import { COLORS } from "./src/config";
 import HelpCenter from "./src/screens/app/HelpCenter";
-// import BootSplash from "react-native-bootsplash";
+import BootSplash from "react-native-bootsplash";
 // import SplashScreen from 'react-native-splash-screen';
 
 Sentry.init({
@@ -121,13 +121,14 @@ const RootNavigator = () => {
   //     console.log("BootSplash has been hidden successfully");
   //   });
   // }, []);
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setIsSplashVisible(false);
-  //   }, 4000); // 3 seconds
+  useEffect(() => {
+    // const timer = setTimeout(() => {
+    //   setIsSplashVisible(false);
+    // }, 4000); // 3 seconds
 
-  //   return () => clearTimeout(timer);
-  // }, []);
+    // return () => clearTimeout(timer);
+    BootSplash.hide({ fade: true });
+  }, []);
 
   // useEffect(() => {
   //   const prepare = async () => {
