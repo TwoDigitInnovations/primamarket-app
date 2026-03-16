@@ -104,7 +104,7 @@ const Categories = () => {
           }
           ListEmptyComponent={
             <View className="flex-1 justify-center items-center py-10">
-              <Text className="text-gray-500">{t('no_categories_found')}</Text>
+              <Text className="text-gray-900">{t('no_categories_found')}</Text>
             </View>
           }
         />

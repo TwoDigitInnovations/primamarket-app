@@ -50,7 +50,7 @@ const Header = () => {
       <View className="flex-row items-center justify-between mb-3">
         <View className="flex-row items-center">
           {/* <MapPin width={20} height={20} color="white" /> */}
-          <Text className="text-white ml-2">Hi {userInfo?.firstName}!</Text>
+          <Text className="text-black ml-2">Hi {userInfo?.firstName}!</Text>
         </View>
         <TouchableOpacity
           onPress={() => {
@@ -70,7 +70,7 @@ const Header = () => {
             />
           ) : (
             <View className="w-8 h-8 rounded-full bg-white/20 items-center justify-center">
-              <User width={20} height={20} color="white" />
+              <User width={20} height={20} color="black" />
             </View>
           )}
         </TouchableOpacity>

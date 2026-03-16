@@ -2,8 +2,10 @@ import React from 'react';
 import { View, Text, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator, CommonActions } from '@react-navigation/native-stack';
-import { Home, ShoppingBag, Heart, ShoppingCart, User } from 'react-native-feather';
+import { ShoppingBag, Heart, ShoppingCart, User } from 'react-native-feather';
+import { HomeIcon } from 'react-native-heroicons/outline';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 // import COLORS from '../constants/colors';
 
 
@@ -202,19 +204,20 @@ function AccountStackScreen() {
 
 const TabNavigator = () => {
   const { cartCount, favoritesCount } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.lightPink,
-        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarActiveTintColor: COLORS.black,
+        tabBarInactiveTintColor: '#4B5563',
         tabBarStyle: {
           minHeight: Platform?.OS === 'android' ? 70 : 95,
           paddingBottom: 8,
           paddingTop: 10,
           paddingHorizontal: 10,
-          backgroundColor: COLORS.dark,
+          backgroundColor: COLORS.tabcolor,
           borderTopWidth: 0,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
@@ -245,9 +248,9 @@ const TabNavigator = () => {
         name="HomeTab"
         component={HomeStackScreen}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: t('home'),
           tabBarIcon: ({ color, size }) => (
-            <Home width={size} height={size} fill={color} />
+            <HomeIcon width={size} height={size} color={color} />
           ),
         }}
       />
@@ -255,7 +258,7 @@ const TabNavigator = () => {
         name="CategoriesTab"
         component={CategoriesStackScreen}
         options={{
-          tabBarLabel: 'Categories',
+          tabBarLabel: t('categories'),
           tabBarIcon: ({ color, size }) => (
             <ShoppingBag width={size} height={size} color={color} />
           ),
@@ -265,7 +268,7 @@ const TabNavigator = () => {
         name="FavoritesTab"
         component={FavoritesScreen}
         options={{
-          tabBarLabel: 'Favorites',
+          tabBarLabel: t('favorites'),
           tabBarIcon: ({ color, size }) => (
             <View style={{ position: 'relative' }}>
               <Heart width={size} height={size} color={color} />
@@ -274,7 +277,7 @@ const TabNavigator = () => {
                   position: 'absolute',
                   top: -8,
                   right: -8,
-                  backgroundColor: '#E58F14',
+                  backgroundColor: COLORS.black,
                   borderRadius: 10,
                   width: 20,
                   height: 20,
@@ -298,7 +301,7 @@ const TabNavigator = () => {
         name="CartStack"
         component={CartStackScreen}
         options={{
-          tabBarLabel: 'Cart',
+          tabBarLabel: t('cart'),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <View style={{ position: 'relative' }}>
@@ -308,7 +311,7 @@ const TabNavigator = () => {
                   position: 'absolute',
                   top: -8,
                   right: -8,
-                  backgroundColor: '#E58F14',
+                  backgroundColor: COLORS.black,
                   borderRadius: 10,
                   width: 20,
                   height: 20,
@@ -332,7 +335,7 @@ const TabNavigator = () => {
         name="Account"
         component={AccountStackScreen}
         options={{
-          tabBarLabel: 'Account',
+          tabBarLabel: t('account'),
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <User width={size} height={size} color={color} />

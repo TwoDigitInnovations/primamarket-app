@@ -521,17 +521,17 @@ const CartScreen = () => {
     <View className="flex-1 bg-gray-50">
     <View className="flex-1">
       {/* Header */}
-      <View className="bg-[#0B051D] px-4 py-3">
+      <View className="bg-[#ff66c4] px-4 py-3">
         <View className="flex-row items-center">
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             className="mr-4"
           >
-            <ChevronLeftIcon size={24} color="white" />
+            <ChevronLeftIcon size={24} color="black" />
           </TouchableOpacity>
           <View>
-            <Text className="text-white text-xl font-semibold">{t('shopping_cart')}</Text>
-            <Text className="text-gray-300 text-sm">{cartItems.length} {cartItems.length === 1 ? t('item') : t('items')}</Text>
+            <Text className="text-black text-xl font-semibold">{t('shopping_cart')}</Text>
+            <Text className="text-gray-900 text-sm">{cartItems.length} {cartItems.length === 1 ? t('item') : t('items')}</Text>
           </View>
         </View>
       </View>

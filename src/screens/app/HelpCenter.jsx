@@ -93,15 +93,15 @@ const HelpCenter = ({ navigation, onBack }) => {
       {/* Header with better spacing */}
      
 
-       <View className="bg-[#0B051D] px-4 py-3">
+       <View className="bg-[#ff66c4] px-4 py-3">
         <View className="flex-row items-center">
           <TouchableOpacity 
             onPress={() => navigation.goBack()}
             className="mr-4"
           >
-            <ChevronLeftIcon size={24} color="white" />
+            <ChevronLeftIcon size={24} color="black" />
           </TouchableOpacity>
-        <Text className="text-xl font-semibold text-white">{t('help_center')}</Text>
+        <Text className="text-xl font-semibold text-black">{t('help_center')}</Text>
         </View>
       </View>
 

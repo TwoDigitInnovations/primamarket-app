@@ -430,9 +430,9 @@ const Favorites = () => {
             onPress={() => navigation.goBack()}
             className="mr-4"
           >
-            <ChevronLeftIcon size={24} color="white" />
+            <ChevronLeftIcon size={24} color="black" />
           </TouchableOpacity>
-          <Text className="text-white text-xl font-semibold">{t('my_favorites')}</Text>
+          <Text className="text-black text-xl font-semibold">{t('my_favorites')}</Text>
         </View>
       </View>
       

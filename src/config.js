@@ -20,7 +20,7 @@ export const API_ENDPOINTS = {
 
 export const COLORS = {
   // mainColor: '#1B293D',
-  mainColor: '#0B051D',
+  mainColor: '#ff66c4',
   pinkcolor: '#FEA8CD',
   secondaryColor: '#FF9D00',
 }

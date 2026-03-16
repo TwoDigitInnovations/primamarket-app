@@ -111,9 +111,9 @@ const ForgotPasswordScreen = () => {
 
         <View className="items-center mb-8">
           <Image
-            source={require('../../assets/new1.png')}
-            className="w-56 h-20"
-            resizeMode="cover"
+            source={require('../../assets/primalogo.png')}
+            className="w-72 h-32"
+            resizeMode="contain"
           />
         </View>
 

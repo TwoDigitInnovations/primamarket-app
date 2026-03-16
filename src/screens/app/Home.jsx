@@ -769,10 +769,10 @@ const HomeScreen = () => {
         <View className="px-4 mb-6">
           <View className="flex-row items-center justify-between mb-4">
             <View className="flex-row items-center">
-              <View className="w-1 h-6 bg-orange-500 rounded-full mr-2" />
+              <View className="w-1 h-6 bg-black rounded-full mr-2" />
               <Text className="text-black text-xl font-bold">{t('explore_categories')}</Text>
             </View>
-            <TouchableOpacity style={{ backgroundColor: COLORS.mainColor }}
+            <TouchableOpacity style={{ backgroundColor: 'black' }}
               onPress={() => navigation.navigate('Categories')}
               className=" px-4 py-1 rounded-full"
             >
@@ -823,8 +823,8 @@ const HomeScreen = () => {
         {/* Flash Sale Section */}
         <View className="px-4 mb-6">
           <View className="flex-row items-center mb-4">
-            <View className="w-4 h-6 bg-orange-500 rounded mr-3" />
-            <Text className="text-orange-500 font-semibold">{t('todays')}</Text>
+            <View className="w-4 h-6 bg-black rounded mr-3" />
+            <Text className="text-black font-semibold">{t('todays')}</Text>
           </View>
           <Text className="text-2xl font-bold text-black mb-4">{t('flash_sales')}</Text>
           <FlashSale />
@@ -832,12 +832,12 @@ const HomeScreen = () => {
   {/* Best Selling Products Section */}
         <View className="mb-6 px-4">
           <View className="flex-row items-center mb-4">
-            <View className="w-4 h-6 bg-orange-500 rounded mr-3" />
-            <Text className="text-orange-500 font-semibold">{t('this_month')}</Text>
+            <View className="w-4 h-6 bg-black rounded mr-3" />
+            <Text className="text-black font-semibold">{t('this_month')}</Text>
           </View>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-2xl font-bold text-black">{t('best_selling_products')}</Text>
-            <TouchableOpacity style={{ backgroundColor: COLORS.mainColor }} 
+            <TouchableOpacity style={{ backgroundColor: 'black' }} 
               onPress={() => navigation.navigate('TopSellingProducts')}
               className=" px-6 py-2 rounded"
             >
@@ -878,7 +878,7 @@ const HomeScreen = () => {
 
           <View className="flex-row items-center justify-between mb-4">
             <Text className="text-2xl font-bold text-black">{t('explore_our_products')}</Text>
-            <TouchableOpacity style={{ backgroundColor: COLORS.mainColor }}
+            <TouchableOpacity style={{ backgroundColor: 'black' }}
               className=" px-6 py-2 rounded"
               onPress={() => navigation.navigate('BestSellingProducts', { products: bestSellingProducts })}
             >
@@ -956,8 +956,8 @@ const HomeScreen = () => {
         {/* Featured - New Arrivals */}
         <View className="px-4 mb-6">
           <View className="flex-row items-center mb-4">
-            <View className="w-4 h-6 bg-orange-500 rounded mr-3" />
-            <Text className="text-orange-500 font-semibold">{t('featured')}</Text>
+            <View className="w-4 h-6 bg-black rounded mr-3" />
+            <Text className="text-black font-semibold">{t('featured')}</Text>
           </View>
           <Text className="text-2xl font-bold text-black mb-4">{t('new_arrival')}</Text>
 

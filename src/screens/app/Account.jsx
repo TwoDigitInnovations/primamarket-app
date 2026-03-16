@@ -36,7 +36,7 @@ const AccountScreen = () => {
     {
       id: 2,
       title: t('change_language'),
-      subtitle: currentLanguage === 'en' ? t('english') : t('spanish'),
+      subtitle: currentLanguage === 'en' ? t('english') : t('swedish'),
       hasArrow: true,
       onPress: () => setLanguageModalVisible(true)
     },
@@ -124,15 +124,15 @@ const AccountScreen = () => {
       <StatusBar barStyle="light-content" backgroundColor="#1e293b" />
 
       {/* Header */}
-      <View className="bg-[#0B051D] px-4 py-3">
+      <View className="bg-[#ff66c4] px-4 py-3">
         <View className="flex-row items-center">
           <TouchableOpacity
             onPress={() => navigation.goBack()}
             className="mr-4"
           >
-            <ChevronLeftIcon size={24} color="white" />
+            <ChevronLeftIcon size={24} color="black" />
           </TouchableOpacity>
-          <Text className="text-white text-xl font-semibold">{t('my_account')}</Text>
+          <Text className="text-black text-xl font-semibold">{t('my_account')}</Text>
         </View>
       </View>
 

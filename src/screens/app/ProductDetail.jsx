@@ -270,12 +270,12 @@ const fetchProductDetails = useCallback(async () => {
       setFavoriteLoading(true);
       const newFavoriteState = !isFavorite;
       
-      // Create unique ID for this specific variant+size combination (like cart)
+     
       const uniqueFavoriteId = selectedSize 
         ? `${product._id}_${selectedVariant}_${selectedSize}`
         : `${product._id}_${selectedVariant}`;
       
-      // Create favorite item with current selection details
+   
       const favoriteItem = {
         _id: product._id,
         uniqueId: uniqueFavoriteId,
@@ -294,9 +294,7 @@ const fetchProductDetails = useCallback(async () => {
       if (updated) {
         // Only update the UI if the favorites were actually changed
         setIsFavorite(newFavoriteState);
-        
-        // Toggle the favoriteUpdated state to trigger the useEffect hook
-        // This will update the favorites count in the tab bar
+       
         setFavoriteUpdated(prev => !prev);
         
         console.log('Favorite toggled successfully:', newFavoriteState);
@@ -332,13 +330,13 @@ const fetchProductDetails = useCallback(async () => {
       const uniqueId = favoriteItem.uniqueId;
       
       if (isFav) {
-        // Add to favorites using unique ID (allows multiple variants of same product)
+     
         if (!favArray.includes(uniqueId)) {
           favArray.push(uniqueId);
           updated = true;
         }
         
-        // Add or update in detailed favorites using unique ID
+   
         const existingIndex = favDetailArray.findIndex(item => item.uniqueId === uniqueId);
         if (existingIndex >= 0) {
           // Update existing favorite with new selection
@@ -731,15 +729,15 @@ const fetchProductDetails = useCallback(async () => {
         <View className="flex-row items-center justify-between">
           <View className="flex-row items-center">
             <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4">
-              <ChevronLeftIcon size={24} color="white" />
+              <ChevronLeftIcon size={24} color="black" />
             </TouchableOpacity>
-            <Text className="text-white text-xl font-semibold">{t('product_details')}</Text>
+            <Text className="text-black text-xl font-semibold">{t('product_details')}</Text>
           </View>
           <TouchableOpacity onPress={handleToggleFavorite}>
             {isFavorite ? (
               <HeartIconSolid size={24} color="#EF4444" />
             ) : (
-              <HeartIconOutline size={24} color="white" />
+              <HeartIconOutline size={24} color="black" />
             )}
           </TouchableOpacity>
         </View>

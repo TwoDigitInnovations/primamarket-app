@@ -353,7 +353,7 @@ const CategoryProducts = () => {
             style={styles.backButton}
             onPress={() => navigation.goBack()}
           >
-            <ChevronLeftIcon size={24} color="#fff" />
+            <ChevronLeftIcon size={24} color="black" />
           </TouchableOpacity>
           <Text style={styles.headerTitle} numberOfLines={1}>
             {categoryName || t('category_products')}
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    backgroundColor: '#1F2937',
+    backgroundColor: '#ff66c4',
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
@@ -416,7 +416,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#ffffff',
+    color: 'black',
   },
   loadingContainer: {
     flex: 1,

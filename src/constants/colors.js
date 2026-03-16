@@ -3,6 +3,8 @@ export const COLORS = {
   // Primary Colors
   lightPink: '#FEA8CD',
   dark: '#0B051D',
+  tabcolor:'#ff66c4',
+  
   
   // Main/Primary color for buttons and accents
   mainColor: '#0B051D',

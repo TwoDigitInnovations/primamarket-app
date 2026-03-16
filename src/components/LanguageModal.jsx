@@ -9,7 +9,7 @@ const LanguageModal = ({ visible, onClose, onSelectLanguage, currentLanguage }) 
 
   const LANGUAGES = [
     { code: 'en', name: t('english') },
-    { code: 'es', name: t('spanish') },
+    { code: 'es', name: t('swedish') },
   ];
 
   React.useEffect(() => {

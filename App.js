@@ -122,12 +122,14 @@ const RootNavigator = () => {
   //   });
   // }, []);
   useEffect(() => {
-    // const timer = setTimeout(() => {
-    //   setIsSplashVisible(false);
-    // }, 4000); // 3 seconds
+    const init = async () => {
+      // Initialize app and hide bootsplash after 2 seconds
+      setTimeout(() => {
+        BootSplash.hide({ fade: true });
+      }, 2000);
+    };
 
-    // return () => clearTimeout(timer);
-    BootSplash.hide({ fade: true });
+    init();
   }, []);
 
   // useEffect(() => {

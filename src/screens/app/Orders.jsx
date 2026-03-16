@@ -497,14 +497,14 @@ const OrdersScreen = ({ navigation }) => {
   if (loading && orders.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar barStyle="dark-content" backgroundColor="#f9fafb" />
+        <StatusBar barStyle="dark-content" backgroundColor="#ff66c4" />
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={styles.backButton}
             >
-              <ChevronLeftIcon size={24} color="#1f2937" />
+              <ChevronLeftIcon size={24} color="#000000" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>{t('my_orders')}</Text>
           </View>
@@ -527,7 +527,7 @@ const OrdersScreen = ({ navigation }) => {
             onPress={() => navigation.goBack()}
             style={styles.backButton}
           >
-            <ChevronLeftIcon size={24} color="#ffffff" />
+            <ChevronLeftIcon size={24} color="#000000" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('my_orders')}</Text>
         </View>
@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
   },
   header: {
-    backgroundColor: '#0B051D',
+    backgroundColor: '#ff66c4',
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
@@ -730,7 +730,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#ffffff',
+    color: 'black',
   },
   loadingContainer: {
     flex: 1,

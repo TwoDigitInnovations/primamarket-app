@@ -250,7 +250,7 @@ const BestSellingProducts = () => {
                 onPress={() => navigation.goBack()}
                 className="mr-4"
               >
-                <ChevronLeftIcon size={24} color="white" />
+                <ChevronLeftIcon size={24} color="black" />
               </TouchableOpacity>
             <Text style={styles.headerTitle}>{t('explore_our_products')}</Text>
             </View>
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: 'white',
+    color: 'black',
   },
   columnWrapper: {
     justifyContent: 'space-between',

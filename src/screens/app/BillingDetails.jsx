@@ -654,15 +654,15 @@ const BillingDetails = () => {
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
-       <View className="bg-[#0B051D] px-4 py-3">
+       <View className="bg-[#ff66c4] px-4 py-3">
             <View className="flex-row items-center">
               <TouchableOpacity 
                 onPress={() => navigation.goBack()}
                 className="mr-4"
               >
-                <ChevronLeftIcon size={24} color="white" />
+                <ChevronLeftIcon size={24} color="black" />
               </TouchableOpacity>
-            <Text className="text-white text-xl font-semibold">{t('billing_details')}</Text>
+            <Text className="text-black text-xl font-semibold">{t('billing_details')}</Text>
             </View>
           </View>
    

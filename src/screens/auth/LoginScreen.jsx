@@ -169,7 +169,7 @@ const LoginScreen = () => {
             onPress={() => setLanguageModalVisible(true)}
           >
             <Text className="text-gray-700 mr-1">
-              {currentLanguage === 'en' ? t('english') : t('spanish')}
+              {currentLanguage === 'en' ? t('english') : t('swedish')}
             </Text>
             <ChevronDownIcon size={16} color="#4B5563" />
           </TouchableOpacity>
@@ -179,9 +179,9 @@ const LoginScreen = () => {
           {/* Logo */}
           <View className="items-center mb-8">
             <Image
-              source={require('../../assets/new1.png')}
-              className="w-64 h-24 "
-              resizeMode="cover"
+              source={require('../../assets/primalogo.png')}
+              className="w-72 h-32"
+              resizeMode="contain"
             />
           </View>
 

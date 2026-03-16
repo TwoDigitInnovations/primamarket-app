@@ -265,7 +265,7 @@ const OrderDetails = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <ChevronLeftIcon size={24} color="#ffffff" />
+            <ChevronLeftIcon size={24} color="black" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('order_details')}</Text>
         </View>
@@ -281,7 +281,7 @@ const OrderDetails = ({ route, navigation }) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <ChevronLeftIcon size={24} color="#ffffff" />
+            <ChevronLeftIcon size={24} color="black" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>{t('order_details')}</Text>
         </View>
@@ -297,7 +297,7 @@ const OrderDetails = ({ route, navigation }) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <ChevronLeftIcon size={24} color="#ffffff" />
+          <ChevronLeftIcon size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>{t('order_details')}</Text>
       </View>
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
   },
   header: {
-    backgroundColor: COLORS.dark,
+    backgroundColor: '#ff66c4',
     paddingHorizontal: 16,
     paddingVertical: 12,
     flexDirection: 'row',
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#ffffff',
+    color: '#00000',
   },
   loadingContainer: {
     flex: 1,
