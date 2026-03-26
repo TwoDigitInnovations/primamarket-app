@@ -421,6 +421,32 @@ const OrderDetails = ({ route, navigation }) => {
           )}
         </TouchableOpacity>
 
+        {/* Track Shipment Button */}
+        {(order.trackingNumber || order.shipmondoShipmentId) && (
+          <TouchableOpacity
+            style={styles.trackButton}
+            onPress={() => navigation.navigate('TrackingScreen', {
+              orderId: order.orderId || order._id,
+              trackingNumber: order.trackingNumber
+            })}
+          >
+            <Text style={styles.trackButtonText}>{t('track_shipment')}</Text>
+          </TouchableOpacity>
+        )}
+
+        {/* Demo Track Shipment Button */}
+        <TouchableOpacity
+          style={[styles.trackButton, { backgroundColor: '#10b981' }]}
+          onPress={() => {
+            navigation.navigate('TrackingScreen', {
+              orderId: order?.orderId || order?._id,
+              trackingNumber: order?.trackingNumber || 'DEMO-TRACK-' + (order?.orderId || '123')
+            });
+          }}
+        >
+          <Text style={styles.trackButtonText}>🚚 {t('track_shipment')} (Demo)</Text>
+        </TouchableOpacity>
+
         {/* Bottom padding for tab bar */}
         <View style={{ height: 100 }} />
       </ScrollView>
@@ -634,6 +660,19 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   invoiceButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  trackButton: {
+    backgroundColor: '#3b82f6',
+    marginHorizontal: 16,
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  trackButtonText: {
     color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',

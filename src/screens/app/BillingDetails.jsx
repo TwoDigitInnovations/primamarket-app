@@ -39,8 +39,14 @@ const BillingDetails = () => {
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [refreshTrigger, setRefreshTrigger] = useState(0);  // Trigger for UI refresh
   
+  // Shipping options state
+  const [shippingOptions, setShippingOptions] = useState([]);
+  const [selectedShipping, setSelectedShipping] = useState(null);
+  const [shippingLoading, setShippingLoading] = useState(false);
+  const [showShippingModal, setShowShippingModal] = useState(false);
+  
   // Payment method state
-  const [paymentMethod, setPaymentMethod] = useState('cod'); // Default to COD
+  const [paymentMethod, setPaymentMethod] = useState('stripe'); // Default to Stripe
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   
   // Form state
@@ -70,6 +76,53 @@ const BillingDetails = () => {
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [showStateDropdown, setShowStateDropdown] = useState(false);
   const [showCityDropdown, setShowCityDropdown] = useState(false);
+
+  // Fetch shipping options when address is complete
+  const fetchShippingOptions = async () => {
+    try {
+      setShippingLoading(true);
+
+      const token = await AsyncStorage.getItem('userToken');
+      if (!token) return;
+
+      const ratesData = {
+        shipping_address: {
+          country: formData.country,
+          pinCode: formData.pinCode,
+          city: formData.city,
+          state: formData.state
+        },
+        productDetail: freshCartItems.map(item => ({
+          weight: item.weight || 0.5,
+          qty: item.qty || 1,
+          name: item.name
+        }))
+      };
+
+      const ratesResponse = await Post('shipmondo/shipping/rates', ratesData);
+      console.log('🚚 Shipping rates response:', ratesResponse);
+
+      if (ratesResponse?.status && Array.isArray(ratesResponse.data) && ratesResponse.data.length > 0) {
+        console.log('🚚 First option raw:', JSON.stringify(ratesResponse.data[0]));
+        const options = ratesResponse.data.map(rate => ({
+          id: rate.product_code || rate.id,
+          product_name: rate.product_name || rate.name || 'Standard Shipping',
+          carrier_name: rate.carrier_name || 'Carrier',
+          price: rate.price || 0,
+          currency: rate.currency || 'USD',
+          delivery_time: rate.delivery_time || '3-5 business days',
+          product_code: rate.product_code
+        }));
+        setShippingOptions(options);
+        setSelectedShipping(options[0]);
+        setDeliveryCharge(options[0].price || 0);
+      }
+    } catch (error) {
+      console.error('❌ Error in fetchShippingOptions:', error);
+    } finally {
+      setShippingLoading(false);
+    }
+  };
 
   // Fetch fresh cart data (for initial load and screen focus)
   const fetchFreshCartData = async () => {
@@ -321,6 +374,37 @@ const BillingDetails = () => {
     }
   }, [formData.state]);
 
+  // Fetch shipping options when address is complete
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchShippingOptions();
+    }, 1000); // Debounce to avoid too many API calls
+
+    return () => clearTimeout(timer);
+  }, [formData.country, formData.pinCode, formData.city, freshCartItems]);
+
+  // Load shipping options immediately when cart items are loaded
+  useEffect(() => {
+    if (freshCartItems.length > 0 && shippingOptions.length === 0) {
+      console.log('🚚 Loading initial shipping options...');
+      fetchShippingOptions();
+    }
+  }, [freshCartItems]);
+
+  // Test Shipmondo connection on mount
+  useEffect(() => {
+    const testConnection = async () => {
+      try {
+        const response = await GetApi('shipmondo/test-connection');
+        console.log('🚚 Shipmondo connection test:', response);
+      } catch (error) {
+        console.error('🚚 Shipmondo connection failed:', error);
+      }
+    };
+    
+    testConnection();
+  }, []);
+
 
   // Check authentication on mount
   useEffect(() => {
@@ -548,6 +632,14 @@ const BillingDetails = () => {
           pinCode: formData.pinCode.trim(),
           phoneNumber: formData.phone.trim(),
         },
+        selectedShipping: selectedShipping ? {
+          id: selectedShipping.id,
+          name: selectedShipping.name,
+          carrier: selectedShipping.carrier,
+          price: selectedShipping.price,
+          product_code: selectedShipping.product_code,
+          delivery_time: selectedShipping.delivery_time
+        } : null,
         paymentmode: paymentMethod === 'cod' ? 'cod' : 'pay',
         subtotal: calculateSubtotal(),
         shipping: 0,
@@ -560,19 +652,18 @@ const BillingDetails = () => {
       
       console.log('Final order data:', orderData);
       
-      // PayPal and Card payment temporarily disabled
-      // If payment method is PayPal or Card, navigate to PayPal payment screen
-      // if (paymentMethod === 'paypal' || paymentMethod === 'card') {
-      //   setLoading(false);
-      //   setIsProcessing(false);
-      //   navigation.push('PayPalPayment', {
-      //     orderData,
-      //     cartItems: freshCartItems,  // Use fresh cart items
-      //     total: calculateTotal(),
-      //     paymentMethod, // Pass payment method
-      //   });
-      //   return;
-      // }
+      // Stripe payment
+      if (paymentMethod === 'stripe' || paymentMethod === 'card') {
+        setLoading(false);
+        setIsProcessing(false);
+        navigation.push('StripePayment', {
+          orderData,
+          cartItems: freshCartItems,  // Use fresh cart items
+          total: calculateTotal(),
+          paymentMethod, // Pass payment method
+        });
+        return;
+      }
       
       // For COD, create order directly
       const response = await Post('createProductRequest', orderData);
@@ -757,6 +848,71 @@ const BillingDetails = () => {
             {renderField(t('company_optional'), 'companyName', t('company_name'), 'default', false)}
           </View>
           
+          {/* Shipping Options */}
+          <View className="bg-white rounded-lg p-4 mb-4">
+            <Text className="font-bold text-lg mb-3">{t('shipping_method')}</Text>
+            
+            {shippingLoading ? (
+              <View className="flex-row items-center justify-center py-4">
+                <ActivityIndicator size="small" color="#1e293b" />
+                <Text className="ml-2 text-gray-500">{t('loading_shipping_options')}</Text>
+              </View>
+            ) : shippingOptions.length > 0 ? (
+              <View>
+                {shippingOptions.map((option, index) => (
+                  <TouchableOpacity
+                    key={option.id || option.product_code || index}
+                    onPress={() => {
+                      setSelectedShipping(option);
+                      setDeliveryCharge(option.price || 0);
+                    }}
+                    className={`flex-row items-center p-3 border rounded-lg mb-2 ${
+                      selectedShipping?.id === option.id ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                    }`}
+                  >
+                    <View 
+                      className={`w-5 h-5 rounded-full border-2 mr-3 items-center justify-center ${
+                        selectedShipping?.id === option.id ? 'border-blue-500 bg-blue-500' : 'border-gray-400'
+                      }`}
+                    >
+                      {selectedShipping?.id === option.id && (
+                        <View className="w-2 h-2 rounded-full bg-white" />
+                      )}
+                    </View>
+                    <View className="flex-1">
+                      <Text className="font-medium text-gray-900">{option.product_name || option.name}</Text>
+                      <Text className="text-sm text-gray-500">{option.carrier_name || option.carrier}</Text>
+                      <Text className="text-xs text-gray-400">{option.delivery_time}</Text>
+                    </View>
+                    <Text className="font-bold text-gray-900">
+                      {option.price > 0 ? `${currencySymbol} ${convertPrice(option.price).toLocaleString()}` : t('free')}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+                
+                <TouchableOpacity
+                  onPress={() => setShowShippingModal(true)}
+                  className="mt-2 py-2 px-4 border border-gray-300 rounded-lg"
+                >
+                  <Text className="text-center text-blue-600 font-medium">{t('view_all_shipping_options')}</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View className="py-4">
+                <Text className="text-gray-500 text-center">{t('no_shipping_options_available')}</Text>
+                <Text className="text-xs text-gray-400 text-center mt-1">
+                  {t('complete_address_to_see_options')}
+                </Text>
+                <TouchableOpacity
+                  onPress={fetchShippingOptions}
+                  className="mt-3 py-2 px-4 bg-blue-500 rounded-lg self-center"
+                >
+                  <Text className="text-white font-medium">{t('retry')}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+          
           {/* Order Summary */}
           <View className="bg-white rounded-lg p-4 mb-4">
             <Text className="font-bold text-lg mb-3">{t('order_summary')}</Text>
@@ -811,6 +967,12 @@ const BillingDetails = () => {
                 <Text>Delivery Charge</Text>
                 <Text>{currencySymbol} {convertPrice(deliveryCharge).toLocaleString()}</Text>
               </View>
+              {selectedShipping && (
+                <View className="flex-row justify-between mb-1">
+                  <Text className="text-xs text-gray-500">via {selectedShipping.carrier}</Text>
+                  <Text className="text-xs text-gray-500">{selectedShipping.delivery_time}</Text>
+                </View>
+              )}
               <View className="flex-row justify-between mb-1">
                 <Text>{t('shipping')}</Text>
                 <Text className="text-green-600">
@@ -829,24 +991,25 @@ const BillingDetails = () => {
           <View className="bg-white rounded-lg p-4 mb-4">
             <Text className="font-bold text-lg mb-3">{t('payment_method')}</Text>
             <View className="flex-row items-center p-3 border border-slate-700 rounded-lg">
-              <View className="w-5 h-5 rounded-full bg-[#0B051D] mr-3 items-center justify-center">
+              <View className="w-5 h-5 rounded-full bg-[#635BFF] mr-3 items-center justify-center">
                 <View className="w-2 h-2 rounded-full bg-white" />
               </View>
               <Text className="font-medium">
-                {paymentMethod === 'cod' ? t('cash_on_delivery') : t('credit_debit_card')}
+                {paymentMethod === 'cod' ? t('cash_on_delivery') : 
+                 paymentMethod === 'stripe' ? 'Stripe Payment' : t('credit_debit_card')}
               </Text>
             </View>
           </View>
           
           {/* Extra padding at bottom */}
-          {/* Payment Method Selection - Temporarily Disabled */}
-          {/* <View className="px-4 mb-6">
+          {/* Payment Method Selection */}
+          <View className="px-4 mb-6">
             <Text className="text-lg font-semibold text-gray-900 mb-3">
               {t('select_payment_method')}
             </Text>
             
-            PayPal Option
-            <TouchableOpacity
+            {/* PayPal Option */}
+            {/* <TouchableOpacity
               onPress={() => setPaymentMethod('paypal')}
               className="flex-row items-center p-4 border-2 rounded-xl mb-3"
               style={{
@@ -870,29 +1033,29 @@ const BillingDetails = () => {
                   className="font-bold text-base"
                   style={{ color: paymentMethod === 'paypal' ? '#0070BA' : '#111827' }}
                 >
-                  {t('pay_with_paypal')}
+                  Pay with PayPal
                 </Text>
                 <Text className="text-xs text-gray-500 mt-1">
-                  {t('redirect_to_paypal')}
+                  Redirect to PayPal website
                 </Text>
               </View>
-              <Text className="text-2xl">💳</Text>
-            </TouchableOpacity>
+              <Text className="text-2xl">🌐</Text>
+            </TouchableOpacity> */}
 
-            Credit Card Option
+            {/* Credit/Debit Card Option */}
             <TouchableOpacity
               onPress={() => setPaymentMethod('card')}
               className="flex-row items-center p-4 border-2 rounded-xl"
               style={{
-                borderColor: paymentMethod === 'card' ? '#E58F14' : '#E5E7EB',
-                backgroundColor: paymentMethod === 'card' ? '#FEF3C7' : '#FFFFFF',
+                borderColor: paymentMethod === 'card' ? '#635BFF' : '#E5E7EB',
+                backgroundColor: paymentMethod === 'card' ? '#F8F9FF' : '#FFFFFF',
               }}
             >
               <View 
                 className="w-6 h-6 rounded-full border-2 mr-3 items-center justify-center"
                 style={{
-                  borderColor: paymentMethod === 'card' ? '#E58F14' : '#9CA3AF',
-                  backgroundColor: paymentMethod === 'card' ? '#E58F14' : 'transparent',
+                  borderColor: paymentMethod === 'card' ? '#635BFF' : '#9CA3AF',
+                  backgroundColor: paymentMethod === 'card' ? '#635BFF' : 'transparent',
                 }}
               >
                 {paymentMethod === 'card' && (
@@ -902,20 +1065,73 @@ const BillingDetails = () => {
               <View className="flex-1">
                 <Text 
                   className="font-bold text-base"
-                  style={{ color: paymentMethod === 'card' ? '#E58F14' : '#111827' }}
+                  style={{ color: paymentMethod === 'card' ? '#635BFF' : '#111827' }}
                 >
-                  {t('pay_with_card')}
+                  Credit/Debit Card
                 </Text>
                 <Text className="text-xs text-gray-500 mt-1">
-                  {t('enter_card_details')}
+                  Secure card payment via Stripe
                 </Text>
               </View>
               <Text className="text-2xl">💳</Text>
             </TouchableOpacity>
-          </View> */}
+          </View>
 
           <View className="h-4" />
         </ScrollView>
+      
+      {/* Shipping Options Modal */}
+      <Modal
+        transparent={true}
+        visible={showShippingModal}
+        animationType="slide"
+        onRequestClose={() => setShowShippingModal(false)}
+      >
+        <View className="flex-1 bg-black/50 bg-opacity-50 justify-end">
+          <View className="bg-white rounded-t-3xl max-h-96">
+            <View className="flex-row justify-between items-center p-4 border-b border-gray-200">
+              <Text className="text-lg font-bold">{t('shipping_options')}</Text>
+              <TouchableOpacity onPress={() => setShowShippingModal(false)}>
+                <Text className="text-gray-500 text-2xl">×</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <ScrollView className="p-4">
+              {shippingOptions.map((option, index) => (
+                <TouchableOpacity
+                  key={option.id || option.product_code || index}
+                  onPress={() => {
+                    setSelectedShipping(option);
+                    setDeliveryCharge(option.price || 0);
+                    setShowShippingModal(false);
+                  }}
+                  className={`flex-row items-center p-4 border rounded-lg mb-3 ${
+                    selectedShipping?.id === option.id ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                  }`}
+                >
+                  <View 
+                    className={`w-6 h-6 rounded-full border-2 mr-4 items-center justify-center ${
+                      selectedShipping?.id === option.id ? 'border-blue-500 bg-blue-500' : 'border-gray-400'
+                    }`}
+                  >
+                    {selectedShipping?.id === option.id && (
+                      <View className="w-3 h-3 rounded-full bg-white" />
+                    )}
+                  </View>
+                  <View className="flex-1">
+                    <Text className="font-bold text-gray-900">{option.product_name || option.name}</Text>
+                    <Text className="text-sm text-gray-600">{option.carrier_name || option.carrier}</Text>
+                    <Text className="text-xs text-gray-500">{option.delivery_time}</Text>
+                  </View>
+                  <Text className="font-bold text-lg text-gray-900">
+                    {option.price > 0 ? `${currencySymbol} ${convertPrice(option.price).toLocaleString()}` : t('free')}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
       
       {/* Place Order Button - Fixed at bottom with proper spacing for tab bar */}
       <View className="bg-white border-t border-gray-200 px-4 pt-3 pb-24">

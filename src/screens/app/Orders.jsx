@@ -482,6 +482,34 @@ const OrdersScreen = ({ navigation }) => {
                 >
                   <Text style={styles.viewDetailsText}>{t('view_details')}</Text>
                 </TouchableOpacity>
+
+                {/* Track Shipment Button */}
+                {(item.trackingNumber || item.shipmondoShipmentId) && (
+                  <TouchableOpacity
+                    style={styles.trackShipmentButton}
+                    onPress={() => {
+                      navigation.navigate('TrackingScreen', {
+                        orderId: item.orderId || item._id,
+                        trackingNumber: item.trackingNumber
+                      });
+                    }}
+                  >
+                    <Text style={styles.trackShipmentText}>{t('track_shipment')}</Text>
+                  </TouchableOpacity>
+                )}
+
+
+                {/* <TouchableOpacity
+                  style={[styles.trackShipmentButton, { backgroundColor: '#10b981' }]}
+                  onPress={() => {
+                    navigation.navigate('TrackingScreen', {
+                      orderId: item.orderId || item._id,
+                      trackingNumber: item.trackingNumber || 'DEMO-TRACK-123'
+                    });
+                  }}
+                >
+                  <Text style={styles.trackShipmentText}>🚚 {t('track_shipment')} (Demo)</Text>
+                </TouchableOpacity> */}
               </>
             ) : (
               <View style={styles.noProductsContainer}>
@@ -1320,6 +1348,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   viewDetailsText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  trackShipmentButton: {
+    backgroundColor: '#3b82f6',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 8,
+    alignItems: 'center',
+  },
+  trackShipmentText: {
     color: 'white',
     fontSize: 14,
     fontWeight: '600',

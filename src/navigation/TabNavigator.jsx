@@ -16,10 +16,11 @@ import CartScreen from '../screens/app/Cart';
 import AccountScreen from '../screens/app/Account';
 import OrdersScreen from '../screens/app/Orders';
 import OrderDetails from '../screens/app/OrderDetails';
+import TrackingScreen from '../screens/app/TrackingScreen';
 import ProductDetails from '../screens/app/ProductDetail';
 import BillingDetails from '../screens/app/BillingDetails';
 import OrderConfirmation from '../screens/app/OrderConfirmation';
-import PayPalPayment from '../screens/app/PayPalPayment';
+import StripePayment from '../screens/app/StripePayment';
 import BestSellingProducts from '../screens/app/BestSellingProducts';
 import TopSellingProducts from '../screens/app/TopSellingProducts';
 import CategoryProducts from '../screens/app/CategoryProducts';
@@ -140,8 +141,8 @@ function CartStackScreen() {
         }}
       />
       <CartStack.Screen
-        name="PayPalPayment"
-        component={PayPalPayment}
+        name="StripePayment"
+        component={StripePayment}
         options={{
           animation: 'slide_from_right',
           headerShown: false,
@@ -187,6 +188,13 @@ function AccountStackScreen() {
       <AccountStack.Screen
         name="OrderDetails"
         component={OrderDetails}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <AccountStack.Screen
+        name="TrackingScreen"
+        component={TrackingScreen}
         options={{
           headerShown: false,
         }}

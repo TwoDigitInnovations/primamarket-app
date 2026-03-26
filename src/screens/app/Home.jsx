@@ -963,7 +963,7 @@ const HomeScreen = () => {
 
           {newArrivals.length > 0 ? (
             newArrivals.map((item) => (
-              <View key={item.id} className="mb-4">
+              <View key={item.id} className="mb-20">
                 <View className="relative">
                   <View className="relative">
                     <Image
@@ -998,7 +998,7 @@ const HomeScreen = () => {
         </View>
 
         {/* Services */}
-        <View className="px-4 pb-8">
+        {/* <View className="px-4 pb-8">
           <View className="space-y-6">
 
             <View className="items-center">
@@ -1032,7 +1032,7 @@ const HomeScreen = () => {
               <Text className="text-gray-600 text-center mb-2">{t('money_back_30_days')}</Text>
             </View>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
