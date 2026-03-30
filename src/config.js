@@ -1,10 +1,10 @@
 
 
-  //  export const API_BASE_URL = 'https://api.primamarket.se/api/';
+   export const API_BASE_URL = 'https://api.primamarket.se/api/';
 
 
 
-        export const API_BASE_URL = 'http://192.168.1.5:5001/api/'; 
+        // export const API_BASE_URL = 'http://192.168.1.5:5001/api/'; 
 
 
 
